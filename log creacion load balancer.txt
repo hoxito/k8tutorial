@@ -1,0 +1,57 @@
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl port-forward svc/frontend 8080:80
+error: unable to forward port because pod is not running. Current status=Pending
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl get services
+frontend         ClusterIP   10.107.84.13     <none>        80/TCP     75s
+kubernetes       ClusterIP   10.96.0.1        <none>        443/TCP    77d
+redis-leader     ClusterIP   10.102.203.100   <none>        6379/TCP   10m
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl port-forward service/frontend 8080:80
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+Handling connection for 8080
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl get service frontend
+frontend   ClusterIP   10.107.84.13   <none>        80/TCP    2m15s
+Forwarding from 127.0.0.1:8080 -> 80
+Handling connection for 8080
+Handling connection for 8080
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl get service frontend
+NAME       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+frontend   ClusterIP   10.107.84.13   <none>        80/TCP    3m28s
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes       ClusterIP   10.96.0.1        <none>        443/TCP    77d
+redis-follower   ClusterIP   10.104.181.23    <none>        6379/TCP   7m29s
+redis-leader     ClusterIP   10.102.203.100   <none>        6379/TCP   13m
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl apply -f frontend-service.yaml
+error: unable to recognize "frontend-service.yaml": no matches for kind "LoadBalancer" in version "v1"
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl apply -f frontend-service.yaml
+error: unable to recognize "frontend-service.yaml": no matches for kind "LoadBalancer" in version "v1"
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl apply -f frontend-service.yaml
+service/frontend configured
+NAME             TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP      10.96.0.1        <none>        443/TCP        77d
+redis-follower   ClusterIP      10.104.181.23    <none>        6379/TCP       8m31s
+redis-leader     ClusterIP      10.102.203.100   <none>        6379/TCP       14m
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl scale deployment frontend --replicas=5
+deployment.apps/frontend scaled
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl get pods
+NAME                             READY   STATUS              RESTARTS   AGE
+frontend-85595f5bf9-4gdxx        1/1     Running             0          6m39s
+frontend-85595f5bf9-7t6zh        1/1     Running             0          6m39s
+frontend-85595f5bf9-977bc        1/1     Running             0          6m39s
+frontend-85595f5bf9-dchqs        0/1     ContainerCreating   0          6s
+frontend-85595f5bf9-k4m4s        0/1     ContainerCreating   0          6s
+redis-follower-dddfbdcc9-c7whw   1/1     Running             0          11m
+redis-follower-dddfbdcc9-vq7dr   1/1     Running             0          11m
+redis-leader-fb76b4755-w6z4k     1/1     Running             1          13d
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl scale deployment frontend --replicas=2
+deployment.apps/frontend scaled
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> kubectl get pods
+NAME                             READY   STATUS        RESTARTS   AGE
+frontend-85595f5bf9-4gdxx        1/1     Running       0          6m56s
+frontend-85595f5bf9-7t6zh        1/1     Terminating   0          6m56s
+frontend-85595f5bf9-977bc        1/1     Running       0          6m56s
+frontend-85595f5bf9-dchqs        1/1     Terminating   0          23s
+frontend-85595f5bf9-k4m4s        1/1     Terminating   0          23s
+redis-follower-dddfbdcc9-c7whw   1/1     Running       0          12m
+redis-follower-dddfbdcc9-vq7dr   1/1     Running       0          12m
+redis-leader-fb76b4755-w6z4k     1/1     Running       1          13d
+PS E:\Documents\materias 2021\computacion en la nube\Evaluacion final Kubernetes\k8tutorial> 
